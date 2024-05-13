@@ -23,13 +23,16 @@ function Cards(pro) {
 
   return (
     <div className="bg-red-800 w-[1000px] flex gap-4 flex-wrap mt-4">
-      {getCourse().map((item, index) => {
+    {
+      course ?(  getCourse().map((item, index) => {
         return (
           <div>
             <ParticularCard data={item} key={index} />
           </div>
         );
-      })}
+      })):(<div>data not found</div>)
+    }
+    
     </div>
   );
 }

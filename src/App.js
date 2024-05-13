@@ -153,36 +153,71 @@ import Spinner from "./Component/Spinner";
 // import { toast } from "react-toastify";
 function App() {
   let [course, Setcourse] = useState([]);
-  let [loading,Setloading]=useState(false)
-  let [category,Setcategory]=useState(filterdata[0].title)
-    async function fetchApi() {
-      Setloading(true)
-      try {
-        let response = await fetch(apUrl);
-        let output = await response.json();
-        // console.log(output);
-        Setcourse(output.data);
-      } catch (error) {
-        console.log("some error create in api data fetching");
-      }
-      Setloading(false)
+  let [loading, Setloading] = useState(false);
+  let [category, Setcategory] = useState(filterdata[0].title);
+  let [errorhandl, Seterrorhandle] = useState(false);
+  async function fetchApi() {
+    Setloading(true);
+    try {
+      let response = await fetch(apUrl);
+      let output = await response.json();
+      // console.log(output);
+      Setcourse(output.data);
+    } catch (error) {
+      Seterrorhandle(true);
+      console.log("some error create in api data fetching");
     }
+    Setloading(false);
+  }
 
-  useEffect(()=>{
-    fetchApi()
-  },[])
+  useEffect(() => {
+    fetchApi();
+  }, []);
   // console.log(course,"api data");
   return (
-    <div className="bg-slate-600 w-[100vw] ">
-      <NavBar />
-      <div className="flex items-center justify-center">
-        <Filter category={category} Setcategory={Setcategory}/>
-      </div>
-      <div className="flex items-center justify-center">
-      {
-        loading? (<Spinner/>):(  <Cardes course={course} category={category}/>)
-      }
-      </div>
+    <div className="bg-slate-600 w-[100vw] h-[100vh]">
+      {!errorhandl ? (
+        <div>
+          <NavBar />
+          <div className="flex items-center justify-center">
+            <Filter category={category} Setcategory={Setcategory} />
+          </div>
+          <div className="flex items-center justify-center">
+            {loading ? (
+              <Spinner />
+            ) : (
+              <Cardes course={course} category={category} />
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="text-center left-[600px] absolute">
+          <div
+            id="toast-simple"
+            class="flex items-center w-full max-w-xs p-4 space-x-4 rtl:space-x-reverse text-gray-500 bg-white divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow dark:text-gray-400 dark:divide-gray-700 space-x dark:bg-gray-800 top-[200px] relative"
+            role="alert"
+          >
+            <svg
+              class="w-5 h-5 text-blue-600 dark:text-blue-500 rotate-45"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 18 20"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m9 17 8 2L9 1 1 19l8-2Zm0 0V9"
+              />
+            </svg>
+            <div class="ps-4 text-sm font-normal">
+              Api data is not fetch try to connect internet
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
