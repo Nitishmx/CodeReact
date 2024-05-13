@@ -4,7 +4,7 @@ function Filter({ category,Setcategory}) {
   let [data, Setdata] = useState(filterdata);
   function filterhandler(title){
     Setcategory(title)
-    console.log(category);
+    // console.log(category);
 
   }
   return (
